@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex from './kvuex'
 
 Vue.use(Vuex)
 
@@ -13,8 +13,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    add(state) {
-      state.counter++
+    add(that) {
+      console.log('##',that);
+      that.state.counter++
       // this.state
     }
   },

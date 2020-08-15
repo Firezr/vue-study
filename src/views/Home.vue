@@ -25,8 +25,14 @@ export default {
     // SlotExample,
     // FormExample
   },
-  // created () {
-  //   this.$store.state = {};
-  // },
+  created () {
+    //直接赋值 不会加到$data里面，会和$data平级
+    this.$store._vm.$$state = {a:1};
+    console.log(this.$store._vm);
+
+
+    this.$store.state = {}
+    // this.$store._vm.$data.$$state = {b:2}
+  },
 }
 </script>
