@@ -8,16 +8,26 @@
 </template>
 
 <script>
+import emitter from "@/mixins/emitter";
+
 import Schema from "async-validator";
 export default {
+  name: 'KFormItem',
+  componentName: 'KFormItem',
   inject: ["form"],
+  mixins: [emitter],
   data() {
     return {
       error: "",
     };
   },
-  created() {
+  mounted() {
     this.$on("validate", this.validate);
+
+    if(this.prop) {
+      //派发事件通知KForm，新增一个KFormItem实例
+      this.dispatch('Form', 'el.form.addField', [this])
+    }
   },
   props: {
     prop: {

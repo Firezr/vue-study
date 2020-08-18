@@ -6,6 +6,8 @@
 
 <script>
 export default {
+  name: 'Form',
+  componentName: 'Form',
   provide() {
     return {
       form: this,
@@ -13,6 +15,15 @@ export default {
   },
   data() {
     return {};
+  },
+  created() {
+    this.fields = []
+    
+    this.$on("el.form.addField", (field) => {
+      if (field) {
+        this.fields.push(field);
+      }
+    });
   },
   props: {
     model: {
@@ -26,10 +37,11 @@ export default {
   },
   methods: {
     validate(callback) {
-      let arr = this.$children
-        .filter((item) => item.prop)
-        .map((item) => item.validate());
+      // let arr = this.$children
+      //   .filter((item) => item.prop)
+      //   .map((item) => item.validate());
 
+      let arr = this.fields.map((item) => item.validate())
       Promise.all(arr)
         .then(() => {
           callback(true);

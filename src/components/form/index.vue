@@ -16,7 +16,7 @@
 import KForm from "./KForm";
 import KFormItem from "./KFormItem";
 import KInput from "./KInput";
-import Notice from "../Notice";
+// import Notice from "../Notice";
 export default {
   data() {
     return {
@@ -38,7 +38,12 @@ export default {
   methods: {
     login() {
       this.$refs["loginForm"].validate(valid => {
-        const notice = this.$create(Notice, {
+        // const notice = this.$create(Notice, {
+        //   title: "12345",
+        //   message: valid ? "请求登录!" : "校验失败!",
+        //   duration: 2000
+        // });
+        const notice = this.$notice({
           title: "12345",
           message: valid ? "请求登录!" : "校验失败!",
           duration: 2000
