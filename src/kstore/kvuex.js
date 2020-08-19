@@ -18,13 +18,40 @@ class Store {
 
     this._mutations = options.mutations
     this._actions = options.actions
+    this._getters = options.getters
 
+
+    //定义computed选项
+    let computed = {}
+    this.getters = {}
+    
+    //  { doubleCounter（state）{} }
+    let store = this
+    Object.keys(this._getters).forEach(key => {
+      // 获取用户定义的getter
+      let fn = store._getters[key]
+      // 转换为computed可以使用无参数形式
+      computed[key] = function () {
+        return fn(store.state)
+      }
+      // 为getters定义只读属性
+      Object.defineProperty(store.getters, key, {
+        get() {
+          return store._vm[key]
+        }
+      })
+    });
+
+    // 相应化处理state
     this._vm = new Vue({
       data: {
         // 加两个$，Vue不做代理
-        $$state: options.state
-      }
+        $$state: options.state,
+      },
+      computed
     })
+    
+    
     
 
     this.commit = this.commit.bind(this)
