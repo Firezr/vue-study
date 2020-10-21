@@ -17,6 +17,7 @@ class A {
   }
 }
 
+
 let a = new A()
 
 console.log(A.util.add(1,2));
