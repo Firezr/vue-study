@@ -34,6 +34,7 @@ export function toggleObserving (value: boolean) {
  * object's property keys into getter/setters that
  * collect dependencies and dispatch updates.
  */
+// 每一个响应式对象都会有一个ob
 export class Observer {
   value: any;
   dep: Dep;
@@ -41,17 +42,24 @@ export class Observer {
 
   constructor (value: any) {
     this.value = value
+    // 为什么在 Observer里面声明dep？
     this.dep = new Dep()
     this.vmCount = 0
+    // 设置一个__ob__属性，引用当前 Observer 实例
     def(value, '__ob__', this)
+
+    // 判断类型
     if (Array.isArray(value)) {
+      // 替换数组原型
       if (hasProto) {
         protoAugment(value, arrayMethods)
       } else {
         copyAugment(value, arrayMethods, arrayKeys)
       }
+      // 如果数组里面的元素是对象还需要做响应化处理
       this.observeArray(value)
     } else {
+      // 对象直接处理
       this.walk(value)
     }
   }
@@ -111,6 +119,8 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
   if (!isObject(value) || value instanceof VNode) {
     return
   }
+
+  // 观察者，已经存在直接返回，否则创建新实例
   let ob: Observer | void
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
@@ -139,6 +149,7 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
+  // 和 key 一一对应
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
@@ -153,15 +164,22 @@ export function defineReactive (
     val = obj[key]
   }
 
+  // 属性拦截！！
+  // val在什么情况下，childOb会有值？------只有是对象类型均会返回childOb
   let childOb = !shallow && observe(val)
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
+      // 获取 key 对应的值
       const value = getter ? getter.call(obj) : val
+      // 如果存在依赖
       if (Dep.target) {
+        // 收集依赖
         dep.depend()
         if (childOb) {
+          // 如果存在子ob，子ob也收集这个依赖
+          // 不仅跟 key 建立关系，和父级object也建立关系 ---父级变了/key的值变了，都能监测到 
           childOb.dep.depend()
           if (Array.isArray(value)) {
             dependArray(value)
@@ -187,7 +205,9 @@ export function defineReactive (
       } else {
         val = newVal
       }
+      // 如果新值是对象，也要响应化
       childOb = !shallow && observe(newVal)
+      // 通知更新
       dep.notify()
     }
   })

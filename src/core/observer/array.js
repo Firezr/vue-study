@@ -5,6 +5,7 @@
 
 import { def } from '../util/index'
 
+// 获取数组原型备份
 const arrayProto = Array.prototype
 export const arrayMethods = Object.create(arrayProto)
 
@@ -21,12 +22,16 @@ const methodsToPatch = [
 /**
  * Intercept mutating methods and emit events
  */
+// 覆盖七个方法
 methodsToPatch.forEach(function (method) {
   // cache original method
   const original = arrayProto[method]
   def(arrayMethods, method, function mutator (...args) {
+    // 执行原定的任务
     const result = original.apply(this, args)
+    // 通知
     const ob = this.__ob__
+    // 如果是插入操作,还需要额外响应化处理 
     let inserted
     switch (method) {
       case 'push':
