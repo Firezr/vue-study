@@ -69,6 +69,7 @@ export class Observer {
    * getter/setters. This method should only be called when
    * value type is Object.
    */
+  // 将obj里所有属性进行响应化处理----obj必须是 Object
   walk (obj: Object) {
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
@@ -178,7 +179,7 @@ export function defineReactive (
         // 收集依赖
         dep.depend()
         if (childOb) {
-          // 如果存在子ob，子ob也收集这个依赖
+          // 如果存在子ob，子ob也收集这个依赖？？
           // 不仅跟 key 建立关系，和父级object也建立关系 ---父级变了/key的值变了，都能监测到 
           childOb.dep.depend()
           if (Array.isArray(value)) {
