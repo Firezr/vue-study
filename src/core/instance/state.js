@@ -340,6 +340,9 @@ export function stateMixin (Vue: Class<Component>) {
       warn(`$props is readonly.`, this)
     }
   }
+
+  // unwatch = vm.$watch('$route', function(newval) {})
+  // vm.$watch('$route', {...})
   Object.defineProperty(Vue.prototype, '$data', dataDef)
   Object.defineProperty(Vue.prototype, '$props', propsDef)
 

@@ -247,6 +247,7 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
     return val
   }
   defineReactive(ob.value, key, val)
+  // 重点!!
   ob.dep.notify()
   return val
 }
