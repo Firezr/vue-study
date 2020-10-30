@@ -186,6 +186,7 @@ export function mountComponent (
       measure(`vue ${name} patch`, startTag, endTag)
     }
   } else {
+    // 用户 $mount时，定义 updateComponent
     updateComponent = () => {
       vm._update(vm._render(), hydrating)
     }
