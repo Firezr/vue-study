@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>{{count}}</h1>
+    <div>doubleCount: {{doubleCount}}</div>
+    <div @click="add">count: {{ count }}</div>
+    <div>counter: {{ counter }}</div>
+  </div>
+
+  <script src="https://unpkg.com/vue@next"></script>
+  <script>
+    const { createApp, ref, reactive, computed, watch, toRefs } = Vue;
+    // 声明组件 
+    const App = {
+      // setup是一个新的组件选项，它是组件内使用Composition API的入口 
+      // 调用时刻是初始化属性确定后，beforeCreate之前 
+      setup() {
+        // 响应化：接收一个对象，返回一个响应式的代理对象 
+        const state = reactive({
+          count: 0,
+          // computed()返回一个不可变的响应式引用对象 
+          // 它封装了getter的返回值 
+          doubleCount: computed(() => state.count * 2)
+        })
+
+        // 返回响应式的Ref对象 
+        const counter = ref(1)
+        setTimeout(() => {
+          // 要修改对象的value 
+          counter.value++
+        }, 1000);
+
+        // setup中声明一个add函数
+        function add() {
+          state.count++
+        }
+
+        // state.count变化cb会执行 
+        // 常用方式还有watch(()=>state.count, cb) 
+        watch(() => console.log('count变了:' + state.count))
+
+        // 返回对象将和渲染函数上下文合并 
+        return {
+          ...toRefs(state), add, counter
+        }
+      }
+    }
+    createApp(App).mount('#app')
+  </script>
+</body>
+
+</html>
