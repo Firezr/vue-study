@@ -48,6 +48,7 @@
         watch(() => console.log('count变了:' + state.count))
 
         // 返回对象将和渲染函数上下文合并 
+        // toRefs将代理对象转换为纯对象，并对其每个key做包装 Ref
         return {
           ...toRefs(state), add, counter
         }
