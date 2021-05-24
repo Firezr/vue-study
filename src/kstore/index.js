@@ -8,14 +8,19 @@ export default new Vuex.Store({
     counter: 0
   },
   getters: {
-    doubleCounter(state) {
+    doubleCounter(state, getters, a, b) {
+      // this指向undefined
+      console.log('getters:', state, getters, a, b)
+      console.log('getters:', this)
       return state.counter * 2
     }
   },
   mutations: {
-    add(that) {
-      console.log('##',that);
-      that.state.counter++
+    add(state, payload) {
+      // this应指向store, kvue未实现此功能, this指向undefined
+      console.log('mutations:', state, payload)
+      console.log('mutations:', this)
+      state.counter++
       // this.state
     }
   },
@@ -24,6 +29,11 @@ export default new Vuex.Store({
       setTimeout(() => {
         commit('add')
       }, 1000);
+    },
+    test(store, payload) {
+      // this应指向store, kvue未实现此功能, this指向undefined
+      console.log('actions:', store, payload)
+      console.log('actions:', this)
     }
   },
   modules: {

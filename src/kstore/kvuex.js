@@ -42,7 +42,7 @@ class Store {
       })
     });
 
-    // 相应化处理state
+    // 响应化处理state
     this._vm = new Vue({
       data: {
         // 加两个$，Vue不做代理
@@ -51,14 +51,11 @@ class Store {
       computed
     })
     
-    
-    
-
     this.commit = this.commit.bind(this)
     this.dispatch = this.dispatch.bind(this)
   }
   get state() {
-    console.log(this._vm);
+    // console.log(this._vm);
     return this._vm.$data.$$state
   }
   set state(data) {
@@ -66,7 +63,7 @@ class Store {
   }
   commit(type, payload) {
     let mutation = this._mutations[type]
-    mutation && mutation(this, payload)
+    mutation && mutation(this.state, payload)
   }
   dispatch(type, payload) {
     let action = this._actions[type]

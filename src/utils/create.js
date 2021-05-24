@@ -24,7 +24,7 @@ import Notice from '../components/Notice'
 
 function create(Component, props) {
   let Constr = Vue.extend(Component)
-  const comp = new Constr({ propsData: props })
+  let comp = new Constr({ propsData: props })
   comp.$mount()
 
   document.body.appendChild(comp.$el)
@@ -38,7 +38,7 @@ function create(Component, props) {
 }
 export default {
   install(Vue) {
-    Vue.prototype.$notice = (options)=>{
+    Vue.prototype.$notice = (options) => {
       return create(Notice, options)
     }
   }

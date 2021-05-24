@@ -32,7 +32,12 @@ export default {
 
 
     this.$store.state = {}
-    // this.$store._vm.$data.$$state = {b:2}
+    // this.$store._vm.$data.$$state = {counter:999}
+
+
+    // this.$store.dispatch('test', 1)
+    // this.$store.commit('add', 2)
+    // this.$store.getters.doubleCounter
   },
 }
 </script>
