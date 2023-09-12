@@ -90,6 +90,8 @@ export function nextTick (cb?: Function, ctx?: Object) {
   callbacks.push(() => {
     if (cb) {
       try {
+        // ctx是undefined，走catch里面？
+        // 不影响，正常执行cb
         cb.call(ctx)
       } catch (e) {
         handleError(e, ctx, 'nextTick')

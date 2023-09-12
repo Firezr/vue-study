@@ -8,7 +8,7 @@ import {
   warn,
   hasOwn,
   hasProto,
-  isObject,
+  isObject, // obj !== null && typeof obj === 'object'
   isPlainObject,
   isPrimitive,
   isUndef,
@@ -166,7 +166,7 @@ export function defineReactive (
   }
 
   // 属性拦截！！
-  // val在什么情况下，childOb会有值？------只有是对象类型均会返回childOb
+  // val在什么情况下，childOb会有值？------只有是对象类型（isObject）均会返回childOb
   let childOb = !shallow && observe(val)
   Object.defineProperty(obj, key, {
     enumerable: true,
@@ -179,10 +179,13 @@ export function defineReactive (
         // 收集依赖
         dep.depend()
         if (childOb) {
-          // 如果存在子ob，子ob也收集这个依赖？？
-          // 不仅跟 key 建立关系，和父级object也建立关系 ---父级变了/key的值变了，都能监测到 
+          // isObject(val) === true
+          // 如果存在childOb，childOb也收集这个依赖？？
+          // 不仅跟 key 建立关系，和父级object也建立关系 ---父级变了/key的值变了，都能监测到  --- wrong？
+          // 为了 Vue.set/delete以及修改数组 时触发更新！！
           childOb.dep.depend()
           if (Array.isArray(value)) {
+            // 下面这个方法不明白，为什么遍历，然后收集依赖？？
             dependArray(value)
           }
         }
